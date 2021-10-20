@@ -24,7 +24,7 @@ class CardApi {
     let url = BASE_URL + `${this.deckId}/draw/?count=${DRAW_NUM}`;
     try {
       let res = await axios({method: 'GET', url: url});
-      return res.data.cards
+      return res.data
     } catch (err) {
       console.log("API Error: ", err);
     }

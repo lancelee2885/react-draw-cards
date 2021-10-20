@@ -1,11 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import CardApi from './Api/CardsAPI'
 import Board from './Board';
 
 function App() {
 
-  let [deckId, setDeckId] = useState();
-  let [remainingCards, setRemaining] = useState();
+  const [deckId, setDeckId] = useState();
+  const [remainingCards, setRemaining] = useState();
+  const [currCards, setCurrCards] = useState([]);
+
+  async function drawCards(id) {
+    let res = await CardApi.drawCards(id);
+    setCurrCards(res.cards);
+    setRemaining(res.remaining);
+  }
+
+  async function getNewDeck() {
+    await CardApi.getDeck()
+    let deck = CardApi.deckId;
+    let remaining = CardApi.cardLeft;
+    setDeckId(deck);
+    setRemaining(remaining);
+    setCurrCards([]);
+  }
 
   useEffect(
     function getDeckOnMount() {
@@ -24,7 +40,11 @@ function App() {
 
   return (
     <div className="App">
-      <Board deckId={deckId} remainingCards={remainingCards}/>
+      <Board deckId={deckId} 
+             remainingCards={remainingCards} 
+             currCards={currCards} 
+             drawCards={drawCards} 
+             getNewDeck={getNewDeck} />
     </div>
   );
 }

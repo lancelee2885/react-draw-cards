@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import CardApi from './Api/CardsAPI'
+import axios from 'axios'
 
 function App() {
+
+  let [deckId, setDeckId] = useState();
+  let [remainingCards, setRemaining] = useState();
+
+  useEffect(
+    function getDeckOnMount() {
+      async function getDeck() {
+        await CardApi.getDeck()
+        let deck = CardApi.deckId;
+        let remaining = CardApi.cardLeft;
+        setDeckId(deck);
+        setRemaining(remaining);
+      }
+      getDeck();
+    },
+    []
+  );
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {deckId}
+      <br />
+      {remainingCards}
     </div>
   );
 }

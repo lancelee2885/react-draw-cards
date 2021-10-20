@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CardApi from './Api/CardsAPI'
-import axios from 'axios'
+import Board from './Board';
 
 function App() {
 
@@ -21,11 +21,10 @@ function App() {
     []
   );
 
+
   return (
     <div className="App">
-      {deckId}
-      <br />
-      {remainingCards}
+      <Board deckId={deckId} remainingCards={remainingCards}/>
     </div>
   );
 }

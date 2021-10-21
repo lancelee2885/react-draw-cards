@@ -1,12 +1,19 @@
 import React, { createRef, useEffect, useState } from 'react';
 import CardApi from './Api/CardsAPI'
 import Board from './Board';
+import {useSelector, useDispatch } from 'react-redux';
+import {fetchDeckId} from './reducers/GlobalReducer';
+
 
 function App() {
 
   const [deckId, setDeckId] = useState();
   const [remainingCards, setRemaining] = useState();
   const [currCards, setCurrCards] = useState([]);
+
+
+  const dispatch = useDispatch();
+  let x = useSelector((state) => (state.deckId));
 
   async function drawCards(id) {
     let res = await CardApi.drawCards(id);
@@ -23,29 +30,44 @@ function App() {
     setCurrCards([]);
   }
 
+  // useEffect(
+  //   function getDeckOnMount() {
+  //     async function getDeck() {
+  //       await CardApi.getDeck()
+  //       let deck = CardApi.deckId;
+  //       let remaining = CardApi.cardLeft;
+  //       setDeckId(deck);
+  //       setRemaining(remaining);
+  //     }
+  //     getDeck();
+  //   },
+  //   []
+  // );
+
   useEffect(
-    function getDeckOnMount() {
-      async function getDeck() {
-        await CardApi.getDeck()
-        let deck = CardApi.deckId;
-        let remaining = CardApi.cardLeft;
-        setDeckId(deck);
-        setRemaining(remaining);
+    function getDeckOnMountRedux() {
+      function getDeckRedux() {
+        dispatch(fetchDeckId())
+
       }
-      getDeck();
+      getDeckRedux();
     },
     []
   );
 
 
   return (
+
     <div className="App">
-      <Board deckId={deckId} 
-             remainingCards={remainingCards} 
-             currCards={currCards} 
-             drawCards={drawCards} 
-             getNewDeck={getNewDeck} />
+        <h1>Deck Id is {x}</h1>
+        <Board deckId={deckId}
+          remainingCards={remainingCards}
+          currCards={currCards}
+          drawCards={drawCards}
+          getNewDeck={getNewDeck} />
     </div>
+
+
   );
 }
 
